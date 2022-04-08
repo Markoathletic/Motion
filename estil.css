@@ -1,0 +1,215 @@
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+
+        :root {
+        --diana-points: 1;
+        --diana-points-str: "1";
+        --diana-special-points: 3;
+        --diana-special-points-str: "3";
+        --diana-size: 7rem;
+        --diana-shadow-size: 1rem;
+        --diana-total-size: calc(
+            var(--diana-size) + var(--diana-shadow-size) * 2
+        );
+        --diana-color: red;
+        --diana-special-color: gold;
+        --total-diana: 8;
+        --diana-animation-duration: 2.4s;
+        --score-delay: calc(
+            var(--diana-animation-duration) * var(--total-diana)
+        );
+        --bg-color: blue;
+        --text-color: white;
+        --accent-color: lime;
+        counter-reset: points;
+        }
+
+        *,
+        *:before,
+        *:after {
+        box-sizing: border-box;
+        }
+
+        body {
+        padding: 15px;
+        overflow: hidden;
+        font-family: "Press Start 2P", sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        user-select: none;
+        }
+
+        .diana-input {
+        position: absolute;
+        left: -99999px;
+        opacity: 0;
+        }
+
+        .diana-input:checked {
+        counter-increment: points var(--diana-points);
+        }
+
+        .diana-input.special:checked {
+        counter-increment: points var(--diana-special-points);
+        }
+
+        .diana {
+        --points: var(--diana-points);
+        position: absolute;
+        top: calc(-1 * var(--diana-total-size));
+        animation-name: diana-movement;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+        animation-duration: var(--diana-animation-duration);
+        animation-delay: calc(
+            var(--diana-animation-duration) * (var(--index) - 1)
+        );
+        }
+
+        .diana:nth-of-type(1) {
+        --index: 1;
+        left: 70%;
+        }
+
+        .diana:nth-of-type(2) {
+        --index: 2;
+        left: 10%;
+        }
+
+        .diana:nth-of-type(3) {
+        --index: 3;
+        left: 80%;
+        }
+
+        .diana:nth-of-type(4) {
+        --index: 4;
+        left: 55%;
+        }
+
+        .diana:nth-of-type(5) {
+        --index: 5;
+        left: 5%;
+        }
+
+        .diana:nth-of-type(6) {
+        --index: 6;
+        left: 35%;
+        }
+
+        .diana:nth-of-type(7) {
+        --index: 7;
+        left: 40%;
+        }
+
+        .diana:nth-of-type(8) {
+        --index: 8;
+        left: 85%;
+        }
+
+        .diana-input:checked + .diana {
+        animation-play-state: paused;
+        pointer-events: none;
+        }
+
+        .diana.special {
+        --points: var(--diana-special-points);
+        }
+
+        .diana:before {
+        --color: var(--diana-color);
+        content: "";
+        display: block;
+        width: var(--diana-size);
+        height: var(--diana-size);
+        border-radius: 50%;
+        background-image: radial-gradient(
+            closest-side,
+            var(--color) 20%,
+            white 0,
+            white 40%,
+            var(--color) 0,
+            var(--color) 60%,
+            white 0,
+            white 80%,
+            var(--color) 0
+        );
+        box-shadow: 4px 4px var(--diana-shadow-size) rgba(0, 0, 0, 0.4);
+        }
+
+        .diana.special:before {
+        --color: var(--diana-special-color);
+        }
+
+        .diana-input:checked + .diana:before {
+        --color: grey;
+        animation: diana-fadeout 0.8s ease-in-out forwards;
+        }
+
+        .diana:after {
+        --points-str: var(--diana-points-str);
+        content: "+" var(--points-str);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 1.7rem;
+        text-shadow: 2px 2px 0px var(--accent-color);
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        }
+
+        .diana.special:after {
+        --points-str: var(--diana-special-points-str);
+        }
+
+        .diana-input:checked + .diana:after {
+        animation: points-up 1.5s forwards;
+        }
+
+        #score {
+        position: absolute;
+        bottom: 2rem;
+        left: 0;
+        right: 0;
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+        color: var(--accent-color);
+        text-shadow: 2px 2px 0px red;
+        pointer-events: none;
+        animation: score-end 0.4s ease-in-out var(--score-delay) forwards;
+        }
+
+        #score:before {
+        content: counter(points);
+        }
+
+        @keyframes diana-fadeout {
+        12% {
+            transform: scale(0.95);
+        }
+        100% {
+            opacity: 0;
+        }
+        }
+
+        @keyframes points-up {
+        10% {
+            transform: translate(-50%, calc(-50% - 3rem));
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+        }
+
+        @keyframes diana-movement {
+        100% {
+            transform: translateY(calc(102vh + var(--diana-total-size)));
+        }
+        }
+
+        @keyframes score-end {
+        100% {
+            transform: translateY(calc(100% - 50vh)) scale(2.2);
+        }
+        }
